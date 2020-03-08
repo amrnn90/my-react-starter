@@ -21,7 +21,7 @@ module.exports = env => {
       output: {
         path: path.resolve(__dirname, "dist"),
         publicPath: "/",
-        filename: "bundle.js",
+        filename: "js/bundle.js",
         chunkFilename: "[name].js",
       },
       module: {
@@ -37,7 +37,7 @@ module.exports = env => {
               loader: "url-loader",
               options: {
                 limit: 8192,
-                name: "static/images/[name].[hash:8].[ext]",
+                name: "images/[name].[hash:8].[ext]",
               },
             },
           },
@@ -45,7 +45,7 @@ module.exports = env => {
             test: /\.(eot|otf|ttf|woff|woff2)$/,
             loader: "file-loader",
             options: {
-              name: "static/fonts/[name].[hash:8].[ext]",
+              name: "fonts/[name].[hash:8].[ext]",
             },
           },
         ],
@@ -91,7 +91,7 @@ module.exports = env => {
 const prodConfig = () => ({
   devtool: "source-map",
   output: {
-    filename: "bundle.[chunkhash].js",
+    filename: "js/bundle.[chunkhash].js",
   },
   module: {
     rules: [
@@ -106,7 +106,19 @@ const prodConfig = () => ({
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin(), new MiniCssExtractPlugin()],
+  plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        "js/**/*",
+        "css/**/*",
+        "images/**/*",
+        "fonts/**/*",
+      ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: "css/styles.[hash:8].css",
+    }),
+  ],
 });
 
 const devConfig = () => ({
