@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { css, Global } from "@emotion/core";
 
-const render = () => (
+const render = ({ counter }) => (
   <>
     {globalStyles()}
-    <div>Hello World</div>
+    <div>Hello Counter: {counter}</div>
   </>
 );
 
@@ -19,7 +19,6 @@ const App = () => {
   /** EFFECTS */
 
   useEffect(() => {
-    console.log(counter);
     const intervalId = setInterval(() => {
       setCounter(counter + 1);
     }, 500);
@@ -28,14 +27,14 @@ const App = () => {
     };
   }, [counter]);
 
-  return render();
+  return render({ counter });
 };
 
 const globalStyles = () => (
   <Global
     styles={css`
       body {
-        background: teal;
+        background: #eee;
       }
     `}
   />

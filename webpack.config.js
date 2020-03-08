@@ -6,6 +6,8 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
 module.exports = env => {
@@ -16,7 +18,6 @@ module.exports = env => {
       mode: env.mode,
       context: path.resolve(__dirname),
       entry: "./src/index.js",
-      watch: true,
       output: {
         path: path.resolve(__dirname, "dist"),
         publicPath: "/",
@@ -50,6 +51,7 @@ module.exports = env => {
         ],
       },
       plugins: [
+        new CopyPlugin([{ from: "./public", to: "./" }]),
         new HtmlWebPackPlugin({
           template: "./public/index.html",
           filename: "./index.html",
@@ -70,13 +72,15 @@ module.exports = env => {
       devServer: {
         stats: {
           modules: false,
+          children: false,
+          hash: false,
         },
         compress: true,
         historyApiFallback: true,
         open: true,
         overlay: true,
         host: "localhost",
-        port: 8080,
+        port: 3000,
         /** check out proxy settings */
       },
     },
@@ -86,9 +90,9 @@ module.exports = env => {
 
 const prodConfig = () => ({
   devtool: "source-map",
-  // output: {
-  //   filename: "bundle.js",
-  // },
+  output: {
+    filename: "bundle.[chunkhash].js",
+  },
   module: {
     rules: [
       {
@@ -102,7 +106,7 @@ const prodConfig = () => ({
       },
     ],
   },
-  plugins: [new MiniCssExtractPlugin()],
+  plugins: [new CleanWebpackPlugin(), new MiniCssExtractPlugin()],
 });
 
 const devConfig = () => ({
