@@ -1,6 +1,5 @@
 const path = require("path");
-const scripts = require("my-react-starter");
-const command = process.argv[2];
+const run = require("my-react-starter");
 
 const options = {
   /** source path */
@@ -28,11 +27,4 @@ const options = {
   proxies: [],
 };
 
-switch (command) {
-  case "dev":
-    scripts.dev(options);
-    break;
-  case "build":
-    scripts.build(options);
-    break;
-}
+run(options);

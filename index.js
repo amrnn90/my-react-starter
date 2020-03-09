@@ -1,6 +1,7 @@
 const path = require("path");
 const _dev = require("./scripts/dev");
 const _build = require("./scripts/build");
+const command = process.argv[2];
 
 const defaultOptions = {
   /** source path */
@@ -31,16 +32,26 @@ const defaultOptions = {
 const build = options => {
   process.env.NODE_ENV = "production";
 
-  _build({ ...defaultOptions, ...options });
+  _build(options);
 };
 
 const dev = options => {
   process.env.NODE_ENV = "development";
 
-  _dev({ ...defaultOptions, ...options });
+  _dev(options);
 };
 
-module.exports = {
-  build,
-  dev,
+const run = options => {
+  const finalOptions = { ...defaultOptions, ...options };
+
+  switch (command) {
+    case "dev":
+      dev(finalOptions);
+      break;
+    case "build":
+      build(finalOptions);
+      break;
+  }
 };
+
+module.exports = run;
