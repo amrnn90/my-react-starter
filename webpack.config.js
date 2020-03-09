@@ -11,6 +11,10 @@ const CopyPlugin = require("copy-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
+const srcPath = path.join(__dirname, "src");
+const indexTemplate = path.join(srcPath, "index.html");
+const staticPath = path.join(srcPath, "static");
+
 module.exports = env => {
   process.env.NODE_ENV = env.mode;
 
@@ -18,7 +22,7 @@ module.exports = env => {
     {
       mode: env.mode,
       context: path.resolve(__dirname),
-      entry: "./src/index.js",
+      entry: path.join(srcPath, "index.js"),
       output: {
         path: path.resolve(__dirname, "dist"),
         publicPath: "/",
@@ -46,8 +50,7 @@ module.exports = env => {
             test: /\.svg$/,
             use: {
               loader: "@svgr/webpack",
-              options: {
-              },
+              options: {},
             },
           },
           {
@@ -60,11 +63,6 @@ module.exports = env => {
         ],
       },
       plugins: [
-        new CopyPlugin([{ from: "./public", to: "./" }]),
-        new HtmlWebPackPlugin({
-          template: "./public/index.html",
-          filename: "./index.html",
-        }),
         new webpack.DefinePlugin({
           "process.env.NODE_ENV": JSON.stringify(env.mode),
         }),
@@ -104,8 +102,29 @@ module.exports = env => {
         /** check out proxy settings */
       },
     },
+    conditionalPlugins(),
     env.mode == "development" ? devConfig() : prodConfig()
   );
+};
+
+const conditionalPlugins = () => {
+  const plugins = [];
+  if (staticPath) {
+    plugins.push(new CopyPlugin([{ from: staticPath, to: "./static" }]));
+  }
+
+  if (indexTemplate) {
+    plugins.push(
+      new HtmlWebPackPlugin({
+        template: indexTemplate,
+        filename: "./index.html",
+      })
+    );
+  }
+
+  return {
+    plugins,
+  };
 };
 
 const prodConfig = () => ({
@@ -133,6 +152,7 @@ const prodConfig = () => ({
         "css/**/*",
         "images/**/*",
         "fonts/**/*",
+        "static/**/*",
       ],
     }),
     new MiniCssExtractPlugin({
