@@ -8,6 +8,7 @@ const TerserWebpackPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
 module.exports = env => {
@@ -82,6 +83,8 @@ module.exports = env => {
           modules: false,
           children: false,
           hash: false,
+          entrypoints: false,
+          excludeAssets: [/hot-update/],
         },
         compress: true,
         historyApiFallback: true,
