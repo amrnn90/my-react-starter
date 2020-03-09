@@ -12,8 +12,14 @@ const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
 const srcPath = path.join(__dirname, "src");
+/** entry point */
+const entry = path.join(srcPath, "index.js");
+/** index template used by HtmlWebPackPlugin */
 const indexTemplate = path.join(srcPath, "index.html");
+/** path for files that should just get copied to output */
 const staticPath = path.join(srcPath, "static");
+/** proxies: each item is an array of: [from, target] */
+const proxies = [];
 
 module.exports = env => {
   process.env.NODE_ENV = env.mode;
@@ -22,7 +28,7 @@ module.exports = env => {
     {
       mode: env.mode,
       context: path.resolve(__dirname),
-      entry: path.join(srcPath, "index.js"),
+      entry: entry,
       output: {
         path: path.resolve(__dirname, "dist"),
         publicPath: "/",
@@ -100,11 +106,39 @@ module.exports = env => {
         host: "localhost",
         port: 3000,
         /** check out proxy settings */
+        proxy: getDevServerProxy(proxies),
       },
     },
     conditionalPlugins(),
     env.mode == "development" ? devConfig() : prodConfig()
   );
+};
+
+const getDevServerProxy = proxies => {
+  const proxy = {};
+  proxies.forEach(([from, target]) => {
+    proxy[from] = {
+      target: target,
+      bypass: function(req, res) {
+        /** serve assets by webpack-dev-server */
+        if (req.originalUrl.match(/\/(js|images|fonts|static)\//)) {
+          return req.originalUrl;
+        }
+
+        /** in development styles are inlined by JS, so just return nothing for css file requests */
+        if (req.originalUrl.match(/\/css\/.*\.css/)) {
+          res.type("text/css");
+          res.send("");
+          return;
+        }
+
+        /** else proxy */
+        return null;
+      },
+    };
+  });
+
+  return proxy;
 };
 
 const conditionalPlugins = () => {
