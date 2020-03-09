@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prod": "webpack --env.mode=production --hide-modules",
-    "dev": "webpack-dev-server --env.mode=development --hide-modules"
+    "dev": "webpack-dev-server --env.mode=development",
+    "hot": "npm run dev -- --hot"
   },
   "keywords": [],
   "author": "",

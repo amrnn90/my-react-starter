@@ -63,7 +63,12 @@ module.exports = env => {
       ],
       optimization: {
         minimize: env.mode === "production",
-        minimizer: [new TerserWebpackPlugin(), new OptimizeCssAssetsPlugin()],
+        minimizer: [
+          new TerserWebpackPlugin({
+            extractComments: false,
+          }),
+          new OptimizeCssAssetsPlugin(),
+        ],
       },
       resolve: {
         extensions: [".js", ".jsx"],
