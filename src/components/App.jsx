@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { css, Global } from "@emotion/core";
+import FeatherSprite from "../svgs/feather-sprite.svg";
+import Icon from "./Icon";
 
 const render = ({ counter }) => (
   <>
     {globalStyles()}
-    <div>Hello Counter: {counter}</div>
+    <FeatherSprite style={{ display: "none" }} />
+
+    <div
+      css={css`
+        font-size: 3rem;
+        color: purple;
+      `}
+    >
+      <Icon name="check" color="green" />
+      <span>Hello Counter: {counter}</span>
+    </div>
   </>
 );
 
@@ -35,6 +47,11 @@ const globalStyles = () => (
     styles={css`
       body {
         background: #eee;
+        line-height: 1.5;
+      }
+
+      span {
+        vertical-align: middle;
       }
     `}
   />

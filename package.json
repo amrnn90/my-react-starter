@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "prod": "webpack --env.mode=production --hide-modules",
-    "dev": "webpack-dev-server --env.mode=development",
-    "hot": "npm run dev -- --hot"
+    "dev": "webpack --env.mode=development --hide-modules",
+    "watch": "webpack-dev-server --env.mode=development",
+    "hot": "webpack-dev-server --env.mode=development --hot",
+    "start": "webpack-dev-server --env.mode=development --hot"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,7 @@
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@emotion/babel-preset-css-prop": "^10.0.27",
+    "@svgr/webpack": "^5.2.0",
     "autoprefixer": "^9.7.4",
     "babel-loader": "^8.0.5",
     "babel-preset-react-app": "^9.1.1",

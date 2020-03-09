@@ -43,6 +43,14 @@ module.exports = env => {
             },
           },
           {
+            test: /\.svg$/,
+            use: {
+              loader: "@svgr/webpack",
+              options: {
+              },
+            },
+          },
+          {
             test: /\.(eot|otf|ttf|woff|woff2)$/,
             loader: "file-loader",
             options: {
@@ -61,6 +69,7 @@ module.exports = env => {
           "process.env.NODE_ENV": JSON.stringify(env.mode),
         }),
         new webpack.ProgressPlugin(),
+        new FriendlyErrorsWebpackPlugin(),
       ],
       optimization: {
         minimize: env.mode === "production",
@@ -78,14 +87,14 @@ module.exports = env => {
         },
       },
       devtool: "source-map",
+      stats: {
+        modules: false,
+        children: false,
+        hash: false,
+        entrypoints: false,
+        excludeAssets: [/hot-update/],
+      },
       devServer: {
-        stats: {
-          modules: false,
-          children: false,
-          hash: false,
-          entrypoints: false,
-          excludeAssets: [/hot-update/],
-        },
         compress: true,
         historyApiFallback: true,
         open: true,
