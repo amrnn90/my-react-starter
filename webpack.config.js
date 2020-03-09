@@ -11,16 +11,27 @@ const CopyPlugin = require("copy-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
+/** source path */
 const srcPath = path.join(__dirname, "src");
+
+/** output path (Must be absolute) */
 const outputAbsPath = path.resolve(__dirname, "dist");
+
+/** name for js bundle */
 const jsBundleName = "bundle.js";
+
+/** name for css bundle */
 const cssBundleName = "styles.css";
-/** entry point */
-const entry = path.join(srcPath, "index.js");
-/** index template used by HtmlWebPackPlugin */
-const indexTemplate = path.join(srcPath, "index.html");
-/** path for files that should just get copied to output */
-const staticPath = path.join(srcPath, "static");
+
+/** entry file (relative to srcPath) */
+const entry = "index.js";
+
+/** index template used by HtmlWebPackPlugin (relative to srcPath) */
+const indexTemplate = "index.html";
+
+/** path for files that should just get copied to output (relative to srcPath) */
+const staticPath = "static";
+
 /** proxies: each item is an array of: [from, target] */
 const proxies = [];
 
@@ -31,7 +42,7 @@ module.exports = env => {
     {
       mode: env.mode,
       context: path.resolve(__dirname),
-      entry: entry,
+      entry: path.join(srcPath, entry),
       output: {
         path: outputAbsPath,
         publicPath: "/",
@@ -156,13 +167,15 @@ const getDevServerProxy = proxies => {
 const conditionalPlugins = () => {
   const plugins = [];
   if (staticPath) {
-    plugins.push(new CopyPlugin([{ from: staticPath, to: "./static" }]));
+    plugins.push(
+      new CopyPlugin([{ from: path.join(srcPath, staticPath), to: "./static" }])
+    );
   }
 
   if (indexTemplate) {
     plugins.push(
       new HtmlWebPackPlugin({
-        template: indexTemplate,
+        template: path.join(srcPath, indexTemplate),
         filename: "./index.html",
       })
     );
