@@ -12,6 +12,9 @@ const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
 const srcPath = path.join(__dirname, "src");
+const outputAbsPath = path.resolve(__dirname, "dist");
+const jsBundleName = "bundle.js";
+const cssBundleName = "styles.css";
 /** entry point */
 const entry = path.join(srcPath, "index.js");
 /** index template used by HtmlWebPackPlugin */
@@ -30,9 +33,9 @@ module.exports = env => {
       context: path.resolve(__dirname),
       entry: entry,
       output: {
-        path: path.resolve(__dirname, "dist"),
+        path: outputAbsPath,
         publicPath: "/",
-        filename: "js/bundle.js",
+        filename: `js/${jsBundleName}`,
         chunkFilename: "[name].js",
       },
       module: {
@@ -74,6 +77,15 @@ module.exports = env => {
         }),
         new webpack.ProgressPlugin(),
         new FriendlyErrorsWebpackPlugin(),
+        new CleanWebpackPlugin({
+          cleanOnceBeforeBuildPatterns: [
+            "js/**/*",
+            "css/**/*",
+            "images/**/*",
+            "fonts/**/*",
+            "static/**/*",
+          ],
+        }),
       ],
       optimization: {
         minimize: env.mode === "production",
@@ -163,9 +175,6 @@ const conditionalPlugins = () => {
 
 const prodConfig = () => ({
   devtool: "source-map",
-  output: {
-    filename: "js/bundle.[chunkhash].js",
-  },
   module: {
     rules: [
       {
@@ -180,17 +189,8 @@ const prodConfig = () => ({
     ],
   },
   plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [
-        "js/**/*",
-        "css/**/*",
-        "images/**/*",
-        "fonts/**/*",
-        "static/**/*",
-      ],
-    }),
     new MiniCssExtractPlugin({
-      filename: "css/styles.[hash:8].css",
+      filename: `css/${cssBundleName}`,
     }),
   ],
 });
