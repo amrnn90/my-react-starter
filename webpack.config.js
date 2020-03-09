@@ -88,15 +88,6 @@ module.exports = env => {
         }),
         new webpack.ProgressPlugin(),
         new FriendlyErrorsWebpackPlugin(),
-        new CleanWebpackPlugin({
-          cleanOnceBeforeBuildPatterns: [
-            "js/**/*",
-            "css/**/*",
-            "images/**/*",
-            "fonts/**/*",
-            "static/**/*",
-          ],
-        }),
       ],
       optimization: {
         minimize: env.mode === "production",
@@ -202,6 +193,15 @@ const prodConfig = () => ({
     ],
   },
   plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        "js/**/*",
+        "css/**/*",
+        "images/**/*",
+        "fonts/**/*",
+        "static/**/*",
+      ],
+    }),
     new MiniCssExtractPlugin({
       filename: `css/${cssBundleName}`,
     }),
