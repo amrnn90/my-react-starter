@@ -1,9 +1,9 @@
 const path = require("path");
-const run = require("my-react-starter");
+const run = require("@amrnn/reactor");
 
 const options = {
   /** source path */
-  srcPath: path.join(__dirname, "frontend"),
+  srcPath: path.join(__dirname, "src"),
 
   /** output path (Must be absolute) */
   outputAbsPath: path.resolve(__dirname, "dist"),
