@@ -9,8 +9,6 @@ const CopyPlugin = require("copy-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 
-const context = path.resolve(__dirname, "..");
-
 module.exports = ({
   srcPath,
   entry,
@@ -20,6 +18,7 @@ module.exports = ({
   indexTemplate,
   staticPath,
   proxies,
+  context,
 }) => {
   const mode = process.env.NODE_ENV || "development";
 

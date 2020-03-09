@@ -27,6 +27,11 @@ const defaultOptions = {
 
   /** proxies: each item is an array of: [from, target] */
   proxies: [],
+
+  /** extra options (not shown in flight.js) */
+
+  /** context */
+  context: path.dirname(require.main.filename),
 };
 
 const build = options => {
