@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCounter(counter + 1);
+      setCounter(counter + 10);
     }, 1000);
     return () => {
       clearInterval(intervalId);
