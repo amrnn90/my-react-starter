@@ -15,7 +15,7 @@ const render = ({ counter }) => (
       `}
     >
       <Icon name="check" color="green" />
-      <span>Hello Counter: {counter}</span>
+      <span>Hello Reactor: {counter}</span>
     </div>
   </>
 );
